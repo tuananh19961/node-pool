@@ -2,7 +2,7 @@
 const puppeteer = require('puppeteer-core');
 require('dotenv').config();
 
-let retries = 100;
+let retries = 5000;
 
 function printProgress(hash, totalHash, threads) {
   console.clear();
