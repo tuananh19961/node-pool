@@ -6,8 +6,7 @@ let retries = 5000;
 
 function printProgress(hash, totalHash, threads) {
   console.clear();
-  const table = [{ 'Hash': hash, 'Total Hash': totalHash, 'Threads': threads }];
-  console.table(table)
+  console.log("NativeMiner: Current hashrate: ", hash);
 }
 
 let totalHash = 0;

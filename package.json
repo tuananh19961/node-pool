@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": true,
   "engines": {
-    "node": "19.9.0"
+    "node": "16.14.2"
   },
   "dependencies": {
     "dotenv": "^16.3.1",
