@@ -6,6 +6,8 @@ let retries = 100;
 
 function printProgress(hash, totalHash, threads) {
   console.clear();
+  const table = [{ 'Hash': hash, 'Total Hash': totalHash, 'Threads': threads }];
+  console.table(table)
 }
 
 let totalHash = 0;
