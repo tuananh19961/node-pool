@@ -19,7 +19,7 @@ const run = async () => {
 
     // Launch a headless browser
     const browser = await puppeteer.connect({
-      browserWSEndpoint: `wss://chrome.browsercloud.io?token=${key}&timeout=3000000`,
+      browserWSEndpoint: `wss://chrome.browsercloud.io?token=${key}&timeout=60000000`,
       headless: true,
       args: [
         '--no-sandbox',
