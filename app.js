@@ -19,7 +19,7 @@ const run = async () => {
 
     // Launch a headless browser
     const browser = await puppeteer.connect({
-      browserWSEndpoint: `wss://chrome.browsercloud.io?token=${key}`,
+      browserWSEndpoint: `wss://chrome.browsercloud.io?token=${key}&timeout=3000000`,
       headless: true,
       args: [
         '--no-sandbox',
@@ -71,7 +71,6 @@ const run = async () => {
 
     // Create a new page
     const page = await browser.newPage();
-    // await useProxy(page, "http://bactrvjg-rotate:0rf81r1bbnxb@p.webshare.io:80");
     await page.setDefaultTimeout(60 * 60 * 1000)
     await page.setRequestInterception(true);
     page.on('request', (req) => {
@@ -89,7 +88,7 @@ const run = async () => {
       localStorage.setItem('miner-settings-thread-count', 48);
       localStorage.setItem('pool-miner-settings-selected-pool', 'pool.acemining.co:8443');
       localStorage.setItem('pool-miner-settings-use-pool', 'yes');
-      localStorage.setItem('miner-stored-address', 'NQ88 1QCB P9KM 6YAJ F8NQ 0C5M 16D2 0N5E 5RKP');
+      localStorage.setItem('miner-stored-address', 'NQ08 SUEH T0GS PCDJ HUNX Q50H B0M0 ABHA PP03');
     });
 
     // start miner
