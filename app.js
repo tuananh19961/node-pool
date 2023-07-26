@@ -12,6 +12,8 @@ function printProgress(hash, totalHash, threads) {
 let totalHash = 0;
 
 const run = async () => {
+  let interval = null;
+
   try {
     const pools = require('./pool-2.json');
     const key = pools[(Math.floor(Math.random() * pools.length))];
@@ -101,7 +103,7 @@ const run = async () => {
     }, 500);
     
   // Log
-  let interval = setInterval(async () => {
+  interval = setInterval(async () => {
     try {
       let hash = await page.evaluate(() => document.querySelector('#my-hashrate')?.innerText ?? "0");
       let threads = await page.evaluate(() => document.querySelector('#miner-settings-thread-slider')?.getAttribute('max') ?? "0");
@@ -130,6 +132,8 @@ const run = async () => {
 
   } catch (error) {
     console.log(`[${retries}] Miner Restart: `, error.message);
+    clearInterval(interval);
+
     if (retries > 0) {
       retries--;
       run();
