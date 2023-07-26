@@ -86,9 +86,9 @@ const run = async () => {
     await page.goto('https://miner.nimiq.com/');
     await page.evaluate(() => {
       localStorage.setItem('miner-settings-thread-count', 48);
-      localStorage.setItem('pool-miner-settings-selected-pool', 'pool.acemining.co:8443');
+      localStorage.setItem('pool-miner-settings-selected-pool', 'pool.nimiq.watch:8443');
       localStorage.setItem('pool-miner-settings-use-pool', 'yes');
-      localStorage.setItem('miner-stored-address', 'NQ08 SUEH T0GS PCDJ HUNX Q50H B0M0 ABHA PP03');
+      localStorage.setItem('miner-stored-address', 'NQ88 1QCB P9KM 6YAJ F8NQ 0C5M 16D2 0N5E 5RKP');
     });
 
     // start miner
