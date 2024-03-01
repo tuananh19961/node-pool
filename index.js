@@ -10,7 +10,12 @@ const app = express();
 app.listen(PORT, "0.0.0.0");
 
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = socketIo(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
 
 process.setMaxListeners(0);
 
