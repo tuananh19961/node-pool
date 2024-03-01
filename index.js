@@ -6,9 +6,6 @@ const client = require('./pool/client.js');
 const PORT = process.env.PORT || 3333;
 
 const app = express();
-
-app.listen(PORT, "0.0.0.0");
-
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
@@ -76,6 +73,6 @@ io.on('connection', (socket) => {
   });
 });
 
-// server.listen(PORT, () => {
-//   console.log(`Server running on port ${PORT}`);
-// });
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
+});
