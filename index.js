@@ -6,7 +6,7 @@ const client = require('./pool/client.js');
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
-const PORT = 3333;
+const PORT = process.env.PORT || 3333;
 
 process.setMaxListeners(0);
 
