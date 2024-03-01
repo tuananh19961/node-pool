@@ -3,15 +3,14 @@ const http = require('http');
 const socketIo = require('socket.io');
 const client = require('./pool/client.js');
 
-const app = express();
-const server = http.createServer(app);
-const io = socketIo(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-  },
-});
 const PORT = process.env.PORT || 3333;
+
+const app = express();
+
+app.listen(PORT, "0.0.0.0");
+
+const server = http.createServer(app);
+const io = socketIo(server);
 
 process.setMaxListeners(0);
 
