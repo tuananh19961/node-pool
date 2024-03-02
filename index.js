@@ -17,18 +17,19 @@ const io = socketIo(server, {
 process.setMaxListeners(0);
 
 io.on('connection', (socket) => {
-  let node = null;
-  let worker = null;
+  let clients = {};
+  let uid = socket.id;
 
   socket.emit('can start');
 
   // Connecteced
   socket.on('start', (params) => {
-    worker = params.stratum.worker;
-    node = client({
-      version: params.version,
-      algo: params.algo,
-      ...params.stratum,
+    const { worker_name, stratum, version, algo } = params;
+    const worker = worker_name || stratum.worker;
+    clients[worker] = client({
+      version,
+      algo,
+      ...stratum,
       autoReconnectOnError: true,
       onConnect: () => console.log('Connected to server'),
       onClose: () => console.log('Connection closed'),
@@ -46,7 +47,7 @@ io.on('connection', (socket) => {
         socket.emit('error', 'WORKER FAILED TO AUTHORIZE');
       },
       onNewMiningWork: (work) => {
-        socket.emit('work', work);
+        socket.emit('work', [worker, work]);
       },
       onSubmitWorkSuccess: (error, result) => {
         socket.emit('shared', { error, result });
@@ -59,8 +60,9 @@ io.on('connection', (socket) => {
 
   // Worker submit work
   socket.on('submit', (work) => {
-    if (!node) return;
-    node.submit(work);
+    const client = clients[work.worker_name];
+    if (!client) return;
+    client.submit(work);
   });
 
   // Worker submit work
@@ -70,8 +72,8 @@ io.on('connection', (socket) => {
 
   // disconnect
   socket.on("disconnect", (reason) => {
-    node.shutdown();
-    node = null;
+    Object.values(clients).forEach(o => o.shutdown());
+    clients = {};
   });
 });
 
