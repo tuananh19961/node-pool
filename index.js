@@ -18,11 +18,13 @@ process.setMaxListeners(0);
 
 io.on('connection', (socket) => {
   let node = null;
+  let worker = null;
 
   socket.emit('can start');
 
   // Connecteced
   socket.on('start', (params) => {
+    worker = params.stratum.worker;
     node = client({
       version: params.version,
       algo: params.algo,
@@ -56,7 +58,7 @@ io.on('connection', (socket) => {
   });
 
   // Worker submit work
-  socket.on('work', (work) => {
+  socket.on('submit', (work) => {
     if (!node) return;
     node.submit(work);
   });
