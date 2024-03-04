@@ -14,9 +14,10 @@ const io = socketIo(server, {
   }
 });
 
-process.setMaxListeners(0);
-
+io.setMaxListeners(Number.MAX_SAFE_INTEGER);
 io.on('connection', (socket) => {
+  socket.setMaxListeners(Number.MAX_SAFE_INTEGER);
+  
   let clients = {};
   let uid = socket.id;
 
