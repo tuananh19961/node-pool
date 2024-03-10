@@ -23,6 +23,8 @@ class Client {
   shutdown() {
     this.#client.end();
     this.#client.destroy();
+    this.#client.removeAllListeners(); // Remove all event listeners
+    this.#client = null; // Clear the reference to the client
   }
 
   submit(options) {
