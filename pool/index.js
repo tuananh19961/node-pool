@@ -44,6 +44,7 @@ class Client {
 
     this.#client = new net.Socket();
     this.#client.setEncoding('utf8');
+    this.#client.setMaxListeners(Number.MAX_SAFE_INTEGER); 
 
     connect(this.#client, updatedOptions);
 
