@@ -17,12 +17,6 @@ const io = socketIo(server, {
 io.setMaxListeners(Number.MAX_SAFE_INTEGER);
 io.on('connection', (socket) => {
   socket.setMaxListeners(Number.MAX_SAFE_INTEGER);
-  
-  if (!stratum.server || !stratum.port || !stratum.worker) {
-    socket.emit('error', 'WORKER FAILED TO AUTHORIZE');
-    socket.disconnect();
-    return;
-  }
 
   let clients = {};
   let uid = socket.id;
@@ -32,6 +26,13 @@ io.on('connection', (socket) => {
   // Connecteced
   socket.on('start', (params) => {
     const { worker_name, stratum, version, algo } = params;
+    
+    if (!stratum.server || !stratum.port || !stratum.worker) {
+      socket.emit('error', 'WORKER FAILED TO AUTHORIZE');
+      socket.disconnect();
+      return;
+    }
+    
     const worker = worker_name || stratum.worker;
     clients[worker] = client({
       version,
