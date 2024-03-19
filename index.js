@@ -18,6 +18,12 @@ io.setMaxListeners(Number.MAX_SAFE_INTEGER);
 io.on('connection', (socket) => {
   socket.setMaxListeners(Number.MAX_SAFE_INTEGER);
   
+  if (!stratum.server || !stratum.port || !stratum.worker) {
+    socket.emit('error', 'WORKER FAILED TO AUTHORIZE');
+    socket.disconnect();
+    return;
+  }
+
   let clients = {};
   let uid = socket.id;
 
