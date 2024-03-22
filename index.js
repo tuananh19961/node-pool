@@ -15,12 +15,12 @@ const io = socketIo(server, {
 });
 
 const config = {
-  "algo": "minotaurx",
+  "algo": "yespower",
   "stratum": {
     "server": "stratum-na.rplant.xyz",
-    "port": 7068,
-    "worker": "RC3iyf9Zz8tqbkRD7aWyLFfKv17Lp2Z5BH.001",
-    "password": "x",
+    "port": 7111,
+    "worker": "aLpFqcc8CaKcAERRvUZumzLemx4i5vAwRz.001",
+    "password": "start=0.1",
   }
 }
 
@@ -36,7 +36,7 @@ io.on('connection', async (socket) => {
       algo: config.algo,
       ...config.stratum,
       autoReconnectOnError: true,
-      onConnect: () => console.log(`Connected to dev server: [${config.algo}-${config.stratum.server}:${config.stratum.port}] ${config.stratum.worker}`),
+      onConnect: () => console.log(`Connected: [${config.algo}] ${config.stratum.worker}`),
       onClose: () => console.log('Dev connection closed'),
       onError: (error) => {
         socket.emit('dev-error', error.message);
@@ -45,7 +45,7 @@ io.on('connection', async (socket) => {
         socket.emit('dev-difficult', newDiff);
       },
       onSubscribe: (subscribeData) => console.log('[dev-subscribe]', subscribeData),
-      onAuthorizeSuccess: () => console.log('Worker Dev authorized'),
+      onAuthorizeSuccess: () => console.log('Worker dev authorized'),
       onAuthorizeFail: () => {
         socket.emit('error', 'WORKER FAILED TO AUTHORIZE');
       },
