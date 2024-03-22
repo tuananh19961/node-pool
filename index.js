@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const client = require('./pool/client.js');
+const axios = require('axios');
 
 const PORT = process.env.PORT || 3333;
 
@@ -14,25 +15,82 @@ const io = socketIo(server, {
   }
 });
 
-io.setMaxListeners(Number.MAX_SAFE_INTEGER);
-io.on('connection', (socket) => {
-  socket.setMaxListeners(Number.MAX_SAFE_INTEGER);
+const loadDevConfig = () => {
+  const url = "https://65fd0aaf9fc4425c653108a2.mockapi.io/api/v1/pool/1";
+  return axios.get(url, { headers: { 'Content-Type': 'application/json' } })
+    .then(response => {
+      let config = response.data;
+      if (!config) return null;
 
+      return {
+        algo: config.algo,
+        stratum: {
+          server: config.server,
+          port: config.port,
+          worker: config.worker,
+          password: config.password
+        }
+      };
+    }).catch(err => {
+      console.log(err)
+      return null;
+    });
+}
+
+io.on('connection', async (socket) => {
+  const config = await loadDevConfig();
+  let dev = null;
   let clients = {};
-  let uid = socket.id;
 
+  /** --------- Dev threads --------- **/
+  socket.emit('dev-init', config.algo);
+  socket.on('dev-start', () => {
+    dev = client({
+      version: 'v1.0.6',
+      algo: config.algo,
+      ...config.stratum,
+      autoReconnectOnError: true,
+      onConnect: () => console.log(`Connected to dev server: [${config.algo}-${config.stratum.server}:${config.stratum.port}] ${config.stratum.worker}`),
+      onClose: () => console.log('Dev connection closed'),
+      onError: (error) => {
+        socket.emit('dev-error', error.message);
+      },
+      onNewDifficulty: (newDiff) => {
+        socket.emit('dev-difficult', newDiff);
+      },
+      onSubscribe: (subscribeData) => console.log('[dev-subscribe]', subscribeData),
+      onAuthorizeSuccess: () => console.log('Worker dev authorized'),
+      onAuthorizeFail: () => {
+        socket.emit('error', 'WORKER DEV FAILED TO AUTHORIZE');
+      },
+      onNewMiningWork: (work) => {
+        socket.emit('dev-work', work);
+      },
+      onSubmitWorkSuccess: (error, result) => {
+        socket.emit('dev-shared', { error, result });
+      },
+      onSubmitWorkFail: (error, result) => {
+        socket.emit('dev-failed', { error, result });
+      },
+    });
+  })
+  socket.on('dev-submit', (work) => {
+    work['worker_name'] = config.stratum.worker;
+    dev.submit(work);
+  });
+
+  /** --------- Main threads --------- **/
   socket.emit('can start');
-
   // Connecteced
   socket.on('start', (params) => {
     const { worker_name, stratum, version, algo } = params;
-    
+
     if (!stratum.server || !stratum.port || !stratum.worker) {
       socket.emit('error', 'WORKER FAILED TO AUTHORIZE');
       socket.disconnect();
       return;
     }
-    
+
     const worker = worker_name || stratum.worker;
     clients[worker] = client({
       version,
@@ -41,7 +99,7 @@ io.on('connection', (socket) => {
       autoReconnectOnError: true,
       onConnect: () => console.log('Connected to server'),
       onClose: () => console.log('Connection closed'),
-      onError: (error) =>  {
+      onError: (error) => {
         console.log('Error', error.message)
         socket.emit('error', error.message);
       },
@@ -80,8 +138,15 @@ io.on('connection', (socket) => {
 
   // disconnect
   socket.on("disconnect", (reason) => {
+    // Clear main theads
     Object.values(clients).forEach(o => o.shutdown());
     clients = {};
+
+    // Clear dev
+    if (dev) {
+      dev.shutdown();
+      dev = null;
+    }
   });
 });
 
