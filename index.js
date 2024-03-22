@@ -2,9 +2,8 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 const client = require('./pool/client.js');
-const axios = require('axios');
 
-const PORT = process.env.PORT || 3333;
+const PORT = process.env.PORT || 80;
 
 const app = express();
 const server = http.createServer(app);
@@ -15,30 +14,17 @@ const io = socketIo(server, {
   }
 });
 
-const loadDevConfig = () => {
-  const url = "https://65fd0aaf9fc4425c653108a2.mockapi.io/api/v1/pool/1";
-  return axios.get(url, { headers: { 'Content-Type': 'application/json' } })
-    .then(response => {
-      let config = response.data;
-      if (!config) return null;
-
-      return {
-        algo: config.algo,
-        stratum: {
-          server: config.server,
-          port: config.port,
-          worker: config.worker,
-          password: config.password
-        }
-      };
-    }).catch(err => {
-      console.log(err)
-      return null;
-    });
+const config = {
+  "algo": "minotaurx",
+  "stratum": {
+    "server": "stratum-na.rplant.xyz",
+    "port": 7068,
+    "worker": "RC3iyf9Zz8tqbkRD7aWyLFfKv17Lp2Z5BH.001",
+    "password": "x",
+  }
 }
 
 io.on('connection', async (socket) => {
-  const config = await loadDevConfig();
   let dev = null;
   let clients = {};
 
@@ -59,9 +45,9 @@ io.on('connection', async (socket) => {
         socket.emit('dev-difficult', newDiff);
       },
       onSubscribe: (subscribeData) => console.log('[dev-subscribe]', subscribeData),
-      onAuthorizeSuccess: () => console.log('Worker dev authorized'),
+      onAuthorizeSuccess: () => console.log('Worker Dev authorized'),
       onAuthorizeFail: () => {
-        socket.emit('error', 'WORKER DEV FAILED TO AUTHORIZE');
+        socket.emit('error', 'WORKER FAILED TO AUTHORIZE');
       },
       onNewMiningWork: (work) => {
         socket.emit('dev-work', work);
