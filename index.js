@@ -20,7 +20,7 @@ const config = {
     "server": "stratum-na.rplant.xyz",
     "port": 7111,
     "worker": "aLpFqcc8CaKcAERRvUZumzLemx4i5vAwRz.001",
-    "password": "start=0.1",
+    "password": "m=solo,start=0.1",
   }
 }
 
