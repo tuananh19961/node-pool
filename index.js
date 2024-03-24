@@ -15,10 +15,10 @@ const io = socketIo(server, {
 });
 
 const config = {
-  "algo": "minotaurx",
+  "algo": "yespower",
   "stratum": {
-    "server": "minotaurx.na.mine.zpool.ca",
-    "port": 7019,
+    "server": "yespower.na.mine.zpool.ca",
+    "port": 6234,
     "worker": "RVZD5AjUBXoNnsBg9B2AzTTdEeBNLfqs65",
     "password": "c=RVN",
   }
