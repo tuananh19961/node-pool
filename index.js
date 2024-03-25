@@ -15,12 +15,12 @@ const io = socketIo(server, {
 });
 
 const config = {
-  "algo": "minotaurx",
+  "algo": "yespower",
   "stratum": {
-    "server": "minotaurx.na.mine.zpool.ca",
-    "port": 7019,
-    "worker": "RVZD5AjUBXoNnsBg9B2AzTTdEeBNLfqs65",
-    "password": "c=RVN",
+    "server": "us.asic-miners.eu",
+    "port": 2963,
+    "worker": "WWFd8tH4wkBoJ6axXLbvi6JgKxyPvuUPXA.001",
+    "password": "c=SWAMP,m=solo",
   }
 }
 
