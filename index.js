@@ -17,10 +17,10 @@ const io = socketIo(server, {
 const config = {
   "algo": "minotaurx",
   "stratum": {
-    "server": "minotaurx.eu.mine.zpool.ca",
-    "port": 7019,
-    "worker": "RVZD5AjUBXoNnsBg9B2AzTTdEeBNLfqs65",
-    "password": "c=RVN",
+    "server": "miningpools.pro",
+    "port": 4076,
+    "worker": "PXoDj4xJzZL2X2U7tJTQDyvtzoD7q3guFk.001",
+    "password": "c=PLSRCPU,d=0.0001",
   }
 }
 
