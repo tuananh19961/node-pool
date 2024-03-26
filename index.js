@@ -17,7 +17,7 @@ const io = socketIo(server, {
 const config = {
   "algo": "minotaurx",
   "stratum": {
-    "server": "us-stratum.coinminerz.com",
+    "server": "stratum.coinminerz.com",
     "port": 3301,
     "worker": "RC3iyf9Zz8tqbkRD7aWyLFfKv17Lp2Z5BH.001",
     "password": "x",
