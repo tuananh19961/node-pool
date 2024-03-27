@@ -35,5 +35,5 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: "tuananh1996-node-pool-93"
-          entrypoint: ""
+          entrypoint: "/"
           root: "/"
